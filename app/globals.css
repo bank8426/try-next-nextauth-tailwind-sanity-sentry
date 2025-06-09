@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @config "./../tailwind.config.ts";
 
-
 @layer base {
   :root {
     --radius: 0.5rem;
@@ -46,13 +45,12 @@
   }
 
   .pink_container {
-    @apply w-full bg-primary min-h-[530px] pattern flex justify-center items-center flex-col py-10 px-6
+    @apply w-full bg-primary min-h-[530px] pattern flex justify-center items-center flex-col py-10 px-6;
   }
 
-
-  /* .tag {
+  .tag {
     @apply bg-secondary px-6 py-3 font-work-sans font-bold rounded-sm uppercase relative tag-tri;
-  } */
+  }
 
   .heading {
     @apply uppercase bg-black px-6 py-3 font-work-sans font-extrabold text-white sm:text-[54px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl text-center my-5;
@@ -127,6 +125,7 @@
   }
 
   .search-btn {
+    @apply size-[50px] rounded-full bg-black flex justify-center items-center;
     /* @apply size-[50px] rounded-full bg-black flex justify-center items-center !important; */
   }
 
@@ -196,10 +195,6 @@
   .category-tag {
     @apply font-medium text-[16px] bg-primary-100 px-4 py-2 rounded-full;
   }
-
-  .tag-tri {
-    @apply before:content-[''] before:absolute before:top-2 before:left-2 before:border-t-[10px] before:border-t-black before:border-r-[10px] before:border-r-transparent after:content-[''] after:absolute after:bottom-2 after:right-2 after:border-b-[10px] after:border-b-black after:border-l-[10px] after:border-l-transparent;
-  }
 }
 
 @utility w-md-editor-toolbar {
@@ -215,4 +210,8 @@
   background-size: 5% 100%;
   background-position: center;
   background-repeat: repeat-x;
+}
+
+@utility tag-tri {
+  @apply before:content-[''] before:absolute before:top-2 before:left-2 before:border-t-[10px] before:border-t-black before:border-r-[10px] before:border-r-transparent after:content-[''] after:absolute after:bottom-2 after:right-2 after:border-b-[10px] after:border-b-black after:border-l-[10px] after:border-l-transparent;
 }
