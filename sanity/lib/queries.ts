@@ -25,7 +25,8 @@ export const STARTUPS_BY_ID_QUERY = defineQuery(`
     _id,
     name,
     image,
-    bio
+    bio,
+    username
   },
   views, 
   description,
@@ -33,3 +34,9 @@ export const STARTUPS_BY_ID_QUERY = defineQuery(`
   image,
   pitch
 }`);
+
+export const STARTUP_VIEWS_QUERY = defineQuery(`
+  *[_type == "startup" && _id == $id][0]{
+    _id,views
+  }
+`);
