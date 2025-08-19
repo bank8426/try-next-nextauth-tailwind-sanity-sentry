@@ -17,50 +17,62 @@ This project was implemented based on a tutorial video on YouTube from JS Master
 
 ## <a name="introduction">Introduction</a>
 
-Backend API for a subscription management service that sends email reminders to users every notice period before a subscription expires.
-This backend also implements user registration, authentication with JWT, rate limiting, and bot protection.
+Web application for a startup directory platform using Next.js with Github authentication, search functionality for pitches by category/title/author.
 
-The reason I wanted to follow this tutorial is that I want to try to learn more about Express.js and MongoDB.
+Just want to learn more about Next.js 15's features and Auth.js.
 
 ## <a name="demo">Demo</a>
 
-### Auth
+### All users
 
-#### Sign up
+#### Dashboard + Search by category + Search by title
 
-<img src="public/readme/sign-up.png" alt="Sign up" />
+<img src="public/readme/dashboard.gif1" alt="Dashboard" />
 
-#### Sign in
+#### Pitch Details + View counter + Editor Picks
 
-<img src="public/readme/sign-in.png" alt="Sign in" />
+<img src="public/readme/pitch-details.gif1" alt="Pitch Details" />
+
+### Authenticated User
+
+#### Login ( First time will redirect to github oauth app)
+
+<img src="public/readme/login.gif1" alt="Login" />
+
+#### User Profile
+
+<img src="public/readme/user-profile.gif1" alt="User Profile" />
+
+#### Pitch Submission
+
+<img src="public/readme/pitch-submission.gif1" alt="Pitch Submission" />
 
 ## <a name="tech-stack">Tech Stack</a>
 
-- Tailwind CSS v4 - as a CSS framework
 - React v19 - as a JS library
 - Next.js v15 - as a React framework
 - Auth.js v5 (known as NextAuth.js) - as an authentication tool
 - Github Oauth App - as an authentication provider
-- Sanity - as a headless CMS
+- Sanity - as a headless CMS (Content Management System) which mean they provided backend, database(called datasets in Sanity and only 2 datasets in free tier), caching mechanism, and library to interact with Sanity.
+- Tailwind CSS v4 - as a CSS framework
 - ShadCN - as a UI component library
 - TypeScript - as a type-checking tool
+- zod - as a form validation tool
 - Sentry - as an error tracking tool and performance monitoring tool
 
 ## <a name="features">Features</a>
 
-- GitHub Authentication: Allows users to log in easily using their GitHub account.
+- GitHub Authentication: Allows users to log in easily using their GitHub account and sync profile information into Sanity.
 
 - Views Counter: Tracks the number of views for each pitch instead of an upvote system.
 
 - Search: Search functionality to load and view pitches efficiently.
 
 - Profile Page: Users can view the list of pitches they've submitted.
-
+<!-- TODO for view counter -->
 - Live Content API: Displays the latest startup ideas dynamically on the homepage using Sanity's Content API.
 
 - Pitch Submission: Users can submit startup ideas, including title, description, category, and multimedia links ( image or video).
-
-- View Pitches: Browse through submitted ideas with filtering options by category.
 
 - Pitch Details Page: Click on any pitch to view its details, with multimedia and description displayed.
 
@@ -97,7 +109,7 @@ npm install
 2. Replace the placeholder values with your actual credentials
 
 ```env
-AUTH_SECRET= # Added by `npx auth`. Read more: https://cli.authjs.dev
+AUTH_SECRET= # Added by `npx auth secret`. Read more: https://cli.authjs.dev
 AUTH_GITHUB_ID= #From Github Oauth app
 AUTH_GITHUB_SECRET= #From Github Oauth app
 NEXT_PUBLIC_SANITY_PROJECT_ID= #From Sanity
@@ -119,17 +131,50 @@ Your server will run on [http://localhost:3000](http://localhost:3000/)
 
 ## <a name="learn">What I learned</a>
 
-- React
-  - submit form server action - in `form` element, React modified `action` prop. Make it receive a callback function that will be executed on server side when form submitted. This callback function must start with `"use server"` keyword.
-    see more [here](https://react.dev/reference/rsc/server-functions)
-  - useActionState -
+- React v19
+
+  - Server Functions - Now React allow client component to call function that available on server side when form submitted or button clicked. So backed doesn't need to create API endpoint to handle form submission anymore. But this callback function must start with `"use server"` keyword. See more [here](https://react.dev/reference/rsc/server-functions)
+
+    - in `form` element, You can add server function into `action` prop. and in case you want to track form input state and pending status when submit, you can use `useActionState` hook from `react`
+
+    - in `button` element, You can add server function into `onClick` prop.
+
+- OAuth flow between Auth.js and Github -
+
+- Sanity
+
+  - They use query language called `GROQ` which has a different syntax than `SQL`.
+
+  - `useCdn` option is use to control whether to use the Content Delivery Network (CDN) or not. And since their `CDN` will `caching` your data which making it faster to load in case of high traffic. but it will need some time to reflect when the data is updated (60 seconds cache). But if you set `useCdn` to `false`, it will fetch data from Sanity directly every time which can be slower.
+
+- Auth.js
+  - They already provide functions related to authentication process like `signIn`, `signOut`, `auth` based on provider that you selected. But you can also customise it to fit your needs.
+  - It also act as middleware to check if user is authenticated or not.
 
 ## <a name="note">Implementation Notes</a>
 
 - Tailwind CSS
 
-  - Since the tutorial video is published when `Tailwind CSS v3` still in use, but `Tailwind CSS v4` is out when I try to implement this project, so I need to update the code to match with.
-    - `tailwind.config.js` is not needed any more
-    - use only one css file `index.css/app.css` instead of multiple css files. But it make me confused since it also has `App.css` file.
+  - Since the tutorial video is published when `v3` still in use, but `v4` is out when I try to implement this project. So I need to update the code to match with `v4` and this change affect the structure of the project. Since many files are not needed any more like `tailwind.config` and `postcss.config`, some tailwind property name changed, use `@utility` instead of `@layer utilities` classes and more. You can see more detail in https://tailwindcss.com/docs/upgrade-guide. But for this project You can see below on what i did to make it work. (But honestly, just install tailwindcss v3 and it will work without headache)
+
+    - Migration `Tailwind CSS v3` to `Tailwind CSS v4`
+
+      - In `app/globals.css`
+        1. Remove old import
+        ```
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        ```
+        2. In case of still using `tailwind.config.ts` in `v4`, add following import instead
+        ```
+        @import "tailwindcss"
+        @config "./../tailwind.config.ts"
+        ```
+      - `!important` not working anymore, you need to add `!` in front of every property names you want to override.
+
+- shadcn
+
+  - `Toast` component is `deprecated`. But they have `sonner` package that provide functionality same as `Toast` component.
 
 ## <a name="miss">Missing Features</a>
