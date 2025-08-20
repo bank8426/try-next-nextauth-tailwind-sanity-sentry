@@ -1,4 +1,6 @@
 <h3 align="center">YC - Startup Directory Platform</h3>
+<!-- TODO update related demo relate to live content api 1. create pitch to reflect in homepage -->
+<!-- TODO update related demo relate to live content api 2. refresh pitch details page to reflect view counter in pitch in home page -->
 
 ## ⚠️ Note
 
@@ -13,7 +15,6 @@ This project was implemented based on a tutorial video on YouTube from JS Master
 5. [Quick Start](#quick-start)
 6. [What I learned](#learn)
 7. [Implementation Notes](#note)
-8. [Missing Features](#miss)
 
 ## <a name="introduction">Introduction</a>
 
@@ -29,7 +30,7 @@ Just want to learn more about Next.js 15's features and Auth.js.
 
 <img src="public/readme/dashboard.gif1" alt="Dashboard" />
 
-#### Pitch Details + View counter + Editor Picks
+#### Pitch Details + Editor Picks
 
 <img src="public/readme/pitch-details.gif1" alt="Pitch Details" />
 
@@ -43,9 +44,17 @@ Just want to learn more about Next.js 15's features and Auth.js.
 
 <img src="public/readme/user-profile.gif1" alt="User Profile" />
 
-#### Pitch Submission
+#### Pitch Submission + Live Content API homepage
 
 <img src="public/readme/pitch-submission.gif1" alt="Pitch Submission" />
+
+#### Edit pitch in Sanity Studio + Live Content API homepage
+
+<img src="public/readme/sanity-studio.gif1" alt="Sanity Studio" />
+
+#### Refresh Pitch Details page + Live Content API homepage
+
+<img src="public/readme/refresh-pitch-details.gif1" alt="Refresh Pitch Details" />
 
 ## <a name="tech-stack">Tech Stack</a>
 
@@ -139,17 +148,29 @@ Your server will run on [http://localhost:3000](http://localhost:3000/)
 
     - in `button` element, You can add server function into `onClick` prop.
 
-- OAuth flow between Auth.js and Github -
+- Next.js 15
+
+  - PPR (Partial Page Rendering) - It allow you to re-render the specific component that is affected by the change instead of the entire page. To use this feature, you need to add `export const experimental_ppr = true;` at the top of your page component and wrap your component with `React` `Suspense` component.
+
+  - `after` function - It allow you to run function after the component is completly rendered. We use it to increase view count in this project.
 
 - Sanity
 
-  - They use query language called `GROQ` which has a different syntax than `SQL`.
-
+  - They use query language called `GROQ` which has a different syntax than `SQL` and `graphQL`. And you need to create schema for your data model and use their `typegen` script to generate types and json based on your schema which will be used by Sanity Studio schema and GROQ query.
   - `useCdn` option is use to control whether to use the Content Delivery Network (CDN) or not. And since their `CDN` will `caching` your data which making it faster to load in case of high traffic. but it will need some time to reflect when the data is updated (60 seconds cache). But if you set `useCdn` to `false`, it will fetch data from Sanity directly every time which can be slower.
+  - `Live Content API` is a feature that allow you to update your page in `real-time` when new/updated data is available in Sanity. By using `sanityFetch` to query data and `SanityLive` component from `next-sanity` package. It also means that it will send signal to page with `SanityLive` component to revalidate data and re-render the page.
 
 - Auth.js
   - They already provide functions related to authentication process like `signIn`, `signOut`, `auth` based on provider that you selected. But you can also customise it to fit your needs.
   - It also act as middleware to check if user is authenticated or not.
+  - OAuth flow between Auth.js and Github provider
+    1. User click on login button
+    2. Auth.js redirect to Github oauth app
+    3. User agree to allow access to their profile information
+    4. Auth.js call `signIn` in callback function with data provided by Github (Noted that different provider will provide different data format which will be important in case of supporting sigin in with multiple providers)
+    5. Auth.js check if user is exist in Sanity
+    6. Auth.js create user in Sanity if not exist.
+    7. Auth.js redirect to dashboard
 
 ## <a name="note">Implementation Notes</a>
 
@@ -176,5 +197,3 @@ Your server will run on [http://localhost:3000](http://localhost:3000/)
 - shadcn
 
   - `Toast` component is `deprecated`. But they have `sonner` package that provide functionality same as `Toast` component.
-
-## <a name="miss">Missing Features</a>
