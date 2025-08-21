@@ -16,7 +16,6 @@ const View = async ({ id }: { id: string }) => {
       .commit();
   });
 
-  // TODO update view count
   return (
     <div className="view-container">
       <div className="absolute -top-2 -right-2">
@@ -24,7 +23,7 @@ const View = async ({ id }: { id: string }) => {
       </div>
 
       <p className="view-text">
-        <span className="font-black">Views: {totalViews}</span>
+        <span className="font-black">Views: {totalViews + 1}</span>
       </p>
     </div>
   );

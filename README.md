@@ -1,36 +1,187 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<h3 align="center">YC - Startup Directory Platform</h3>
 
-## Getting Started
+## ⚠️ Note
 
-First, run the development server:
+This project was implemented based on a tutorial video on YouTube from JS Mastery [Next.js 15 Crash Course | Build and Deploy a Production-Ready Full Stack App](https://www.youtube.com/watch?v=Zq5fmkH0T78).
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Demo](#demo)
+3. [Tech Stack](#tech-stack)
+4. [Features](#features)
+5. [Quick Start](#quick-start)
+6. [What I learned](#learn)
+7. [Implementation Notes](#note)
+
+## <a name="introduction">Introduction</a>
+
+Web application for a startup directory platform using Next.js with GitHub authentication, search functionality for pitches by category/title/author.
+
+I just want to learn more about the features of Next.js 15 and Auth.js.
+
+## <a name="demo">Demo</a>
+
+### All users
+
+#### Dashboard + Search by category + Search by title
+
+<img src="public/readme/dashboard.gif" alt="Dashboard" />
+
+#### Pitch Details + Editor Picks
+
+<img src="public/readme/pitch-details.gif" alt="Pitch Details" />
+
+### Authenticated User
+
+#### Login ( First time will redirect to GitHub OAuth app)
+
+<img src="public/readme/login.gif" alt="Login" />
+
+#### User Profile
+
+<img src="public/readme/user-profile.gif" alt="User Profile" />
+
+#### Live Content API Dashboard (Create new pitch/ View pitch details page/ Edit pitch in Sanity Studio)
+
+<img src="public/readme/live-homepage.gif" alt="Live Content API Dashboard" />
+
+## <a name="tech-stack">Tech Stack</a>
+
+- React v19 - as a JS library
+- Next.js v15 - as a React framework
+- Auth.js v5 (known as NextAuth.js) - as an authentication tool
+- Github Oauth App - as an authentication provider
+- Sanity - as a headless CMS (Content Management System), which means they provide backend, database(called datasets in Sanity and only 2 datasets in the free tier), caching mechanism, and a library to interact with Sanity.
+- Tailwind CSS v4 - as a CSS framework
+- ShadCN - as a UI component library
+- TypeScript - as a type-checking tool
+- zod - as a form validation tool
+- Sentry - as an error tracking tool and performance monitoring tool
+
+## <a name="features">Features</a>
+
+- GitHub Authentication: Allows users to log in easily using their GitHub account and sync profile information into Sanity.
+
+- Views Counter: Tracks the number of views for each pitch instead of an upvote system.
+
+- Search: Search functionality to load and view pitches efficiently.
+
+- Profile Page: Users can view the list of pitches they've submitted.
+
+- Live Content API: Displays the latest startup ideas dynamically on the homepage using Sanity's Content API.
+
+- Pitch Submission: Users can submit startup ideas, including title, description, category, and multimedia links ( image or video).
+
+- Pitch Details Page: Click on any pitch to view its details, with multimedia and description displayed.
+
+- Editor Picks: Admins can highlight top startup ideas using the "Editor Picks" feature managed via Sanity Studio.
+
+## <a name="quick-start">Quick Start</a>
+
+Follow these steps to set up the project locally on your machine.
+
+### Prerequisites
+
+- Git
+- Node.js
+- npm
+
+### Cloning the Repository
+
+```bash
+git clone https://github.com/bank8426/try-next-nextauth-tailwind-sanity-sentry.git
+cd try-next-nextauth-tailwind-sanity-sentry
+```
+
+### Installation
+
+Install the project dependencies using npm:
+
+```bash
+npm install
+```
+
+### Set Up Environment Variables
+
+1. Create a new file named `.env.development.local` and copy the content inside `.env.example`
+2. Replace the placeholder values with your actual credentials
+
+```env
+AUTH_SECRET= # Added by `npx auth secret`. Read more: https://cli.authjs.dev
+AUTH_GITHUB_ID= #From Github Oauth app
+AUTH_GITHUB_SECRET= #From Github Oauth app
+NEXT_PUBLIC_SANITY_PROJECT_ID= #From Sanity
+NEXT_PUBLIC_SANITY_DATASET= #From Sanity
+NEXT_PUBLIC_SANITY_API_VERSION="vX" #latest version
+SANITY_WRITE_TOKEN= #From Sanity
+SENTRY_AUTH_TOKEN= #From Sentry
+```
+
+**Running the Project**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Your server will run on [http://localhost:3000](http://localhost:3000/)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## <a name="learn">What I learned</a>
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- React v19
 
-## Learn More
+  - Server Functions - Now React allows client components to call functions that are available on the server side when a form is submitted or a button is clicked. So backed doesn't need to create an API endpoint to handle form submission anymore. But this callback function must start with the `"use server"` keyword. See more [here](https://react.dev/reference/rsc/server-functions)
 
-To learn more about Next.js, take a look at the following resources:
+    - In the `form` element, you can add a server function into the `action` prop. And in case you want to track form input state and pending status when submitting, you can use `useActionState` hook from `react`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    - In the `button` element, you can add a server function to the `onClick` prop.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Next.js 15
 
-## Deploy on Vercel
+  - PPR (Partial Page Rendering) - It allows you to re-render the specific component that is affected by the change instead of the entire page. To use this feature, you need to add `export const experimental_ppr = true;` at the top of your page component and wrap your component with a `React` `Suspense` component.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  - `after` function - It allows you to run a function after the component is completely rendered. We use it to increase the view count in this project.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Sanity
+
+  - They use a query language called `GROQ`, which has a different syntax from `SQL` and `GraphQL`. And you need to create a schema for your data model and use their `typegen` script to generate types and JSON based on your schema, which will be used by the Sanity Studio schema and GROQ query.
+  - `useCdn` option is used to control whether to use the Content Delivery Network (CDN) or not. And since their `CDN` will `cache` your data, which makes it faster to load in case of high traffic. But it will need some time to reflect when the data is updated (60-second cache). But if you set `useCdn` to `false`, it will fetch data from Sanity directly every time, which can be slower.
+  - `Live Content API` is a feature that allows you to update your page in `real-time` when new/updated data is available in Sanity. By using `sanityFetch` to query data and the `SanityLive` component from the `next-sanity` package. It also means that it will send a signal to the page with the `SanityLive` component to revalidate data and re-render the page.
+
+- Auth.js
+  - They already provide functions related to the authentication process, like `signIn`, `signOut`, and `auth`, based on the provider that you selected. But you can also customise it to fit your needs.
+  - It also acts as middleware to check if the user is authenticated or not.
+  - OAuth flow between Auth.js and GitHub provider
+    1. The user clicks on the login button
+    2. Auth.js redirects to GitHub OAuth app
+    3. User agrees to allow access to their profile information
+    4. Auth.js call `signIn` in the callback function with data provided by GitHub (Note that different providers will provide different data formats, which will be important in case of supporting sign-in with multiple providers)
+    5. Auth.js checks if the user exists in Sanity
+    6. Auth.js creates a user in Sanity if it does not exist.
+    7. Auth.js redirects to the dashboard
+
+## <a name="note">Implementation Notes</a>
+
+- Tailwind CSS
+
+  - Since the tutorial video was published when `v3` was still in use, but `v4` is out when I try to implement this project. So I need to update the code to match `v4`, and this change affects the structure of the project. Since many files are not needed anymore, like `tailwind.config` and `postcss.config`, some tailwind property names have changed, use `@utility` instead of `@layer utilities` classes, and more. You can see more details in https://tailwindcss.com/docs/upgrade-guide. But for this project, you can see below what I did to make it work. (But honestly, just install TailwindCSS v3 and it will work without a headache)
+
+    - Migration `Tailwind CSS v3` to `Tailwind CSS v4`
+
+      - In `app/globals.css`
+        1. Remove old import
+        ```
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        ```
+        2. In case of still using `tailwind.config.ts` in `v4`, add the following import instead
+        ```
+        @import "tailwindcss"
+        @config "./../tailwind.config.ts"
+        ```
+      - `!important` not working anymore, you need to add `!` in front of every property name you want to override.
+
+- shadcn
+
+  - `Toast` component is `deprecated`. But they have a `sonner` package that provides functionality similar to the `Toast` component.
