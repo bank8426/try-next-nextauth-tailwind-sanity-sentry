@@ -28,33 +28,25 @@ Just want to learn more about Next.js 15's features and Auth.js.
 
 #### Dashboard + Search by category + Search by title
 
-<img src="public/readme/dashboard.gif1" alt="Dashboard" />
+<img src="public/readme/dashboard.gif" alt="Dashboard" />
 
 #### Pitch Details + Editor Picks
 
-<img src="public/readme/pitch-details.gif1" alt="Pitch Details" />
+<img src="public/readme/pitch-details.gif" alt="Pitch Details" />
 
 ### Authenticated User
 
 #### Login ( First time will redirect to github oauth app)
 
-<img src="public/readme/login.gif1" alt="Login" />
+<img src="public/readme/login.gif" alt="Login" />
 
 #### User Profile
 
-<img src="public/readme/user-profile.gif1" alt="User Profile" />
+<img src="public/readme/user-profile.gif" alt="User Profile" />
 
-#### Pitch Submission + Live Content API homepage
+#### Live Content API Dashboard (Create new pitch/ View pitch details page/ Edit pitch in Sanity Studio)
 
-<img src="public/readme/pitch-submission.gif1" alt="Pitch Submission" />
-
-#### Edit pitch in Sanity Studio + Live Content API homepage
-
-<img src="public/readme/sanity-studio.gif1" alt="Sanity Studio" />
-
-#### Refresh Pitch Details page + Live Content API homepage
-
-<img src="public/readme/refresh-pitch-details.gif1" alt="Refresh Pitch Details" />
+<img src="public/readme/live-homepage.gif" alt="Live Content API Dashboard" />
 
 ## <a name="tech-stack">Tech Stack</a>
 
