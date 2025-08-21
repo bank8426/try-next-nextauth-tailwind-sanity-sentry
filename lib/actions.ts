@@ -36,6 +36,7 @@ export const createPitch = async (
         _type: "reference",
         _ref: session?.id,
       },
+      views: 0,
     };
     const result = await writeClient.create({ _type: "startup", ...startup });
     return parseServerActionResponse({
